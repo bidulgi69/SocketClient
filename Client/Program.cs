@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 namespace Client
 {
@@ -27,9 +28,16 @@ namespace Client
                     sender.Connect(localEndPoint);
                     Console.WriteLine("Socket connected to -> {0} ", sender.RemoteEndPoint.ToString());
 
-                    byte[] messageSent = new byte[256];
-                    
-                    int byteSent = sender.Send(messageSent);
+                    //byte[] messageSent = Encoding.ASCII.GetBytes("J&HPRESS  JSKJ-200  ");
+                    //int intVal = 27;
+
+                    byte[] message = new byte[512];
+                    byte[] headers = Encoding.ASCII.GetBytes("J&HPRESS  JSJK-200  ");
+                    int[] nums = { 27, 30, 13, 3 };
+                    Buffer.BlockCopy(headers, 0, message, 0, headers.Length);
+                    Buffer.BlockCopy(nums, 0, message, 20, nums.Length);
+
+                    sender.Send(message);
 
                     sender.Shutdown(SocketShutdown.Both);
                     sender.Close();
